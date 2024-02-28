@@ -1,7 +1,7 @@
-const { Route } = require('express')
+const { Router } = require('express')
 const {getMyDiary} = require("../controllers/diary.controller");
-const router = Route();
-
+const router = Router();
+1
 router.get('/my', getMyDiary);
 
 module.exports = router 
