@@ -5,4 +5,11 @@ const sequelize = new Sequelize("diarybook", "postgres", "secret", {
   dialect: "postgres",
 });
 
-module.exports = sequelize;
+const db = {};
+
+db.Sequelize = Sequelize;
+db.sequelize = sequelize;
+
+db.diary = require("./diary.model")(sequelize, Sequelize);
+
+module.exports = db;
