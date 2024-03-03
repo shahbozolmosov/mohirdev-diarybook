@@ -3,20 +3,26 @@
     <div class="col-md-6 offset-3">
       <div class="card mt-3">
         <div class="card-body">
-          <form action="" method="post">
+          <form
+            action="/diary/add"
+            method="post"
+            enctype="application/x-www-form-urlencoded"
+          >
             <div class="mb-3">
-              <label for="formFile" class="form-label">Default file input
-                example</label>
-              <input class="form-control" type="file" id="formFile" />
+              <label for="imageUrl" class="form-label">Image Url</label>
+              <input
+                class="form-control"
+                type="text"
+                name="imageUrl"
+                id="imageUrl"
+              />
             </div>
             <div class="mb-3">
-              <label
-                for="exampleFormControlTextarea1"
-                class="form-label"
-              >Example textarea</label>
+              <label for="text" class="form-label">Nima haqida yozamiz</label>
               <textarea
                 class="form-control"
-                id="exampleFormControlTextarea1"
+                name="text"
+                id="text"
                 rows="4"
               ></textarea>
             </div>
