@@ -9,7 +9,7 @@ const {
   addCommentToDiary,
 } = require("../controllers/diary.controller");
 const router = Router();
-1;
+
 router.get("/my", getMyDiary);
 router.get("/:id", getDiaryById);
 router.get("/update/:id", updateDiaryPage);
