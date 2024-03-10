@@ -31,7 +31,7 @@ const getDiaryById = async (req, res) => {
       raw: true,
     });
     res.render("diary/one-diary", {
-      title: "One Diary",
+      title: "Diary",
       diary: diary,
     });
   } catch (error) {
@@ -55,8 +55,43 @@ const addNewDiary = async (req, res) => {
   }
 };
 
+// Desc     Update diary page
+// Route    GET /diary/update/:id
+// Access   Private
+const updateDiaryPage = async (req, res) => {
+  try {
+    const diary = await Diary.findByPk(req.params.id, {
+      raw: true,
+    });
+    res.render("diary/update-diary", {
+      title: "Diary",
+      diary: diary,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Desc     Update diary
+// Route    POST /diary/update/:id
+// Access   Private
+const updateDiary = async (req, res) => {
+  try {
+    await Diary.update(
+      { text: req.body.text },
+      { where: { id: req.params.id } }
+    );
+
+    res.redirect('/diary/my')
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   getMyDiary,
   getDiaryById,
   addNewDiary,
+  updateDiaryPage,
+  updateDiary
 };
