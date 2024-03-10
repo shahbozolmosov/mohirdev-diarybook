@@ -12,7 +12,7 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING(500),
         allowNull: false,
       }, 
-      text: {
+      comment: {
         type: Sequelize.STRING(1000),
         allowNull: true
       }
