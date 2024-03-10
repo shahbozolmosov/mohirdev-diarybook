@@ -55,13 +55,16 @@
                 >{{createdAt}}</small></p>
             </div>
             {{#if imageUrl}}
-            <img src="{{imageUrl}}" class="card-img-bottom" alt="..." />
+              <img src="{{imageUrl}}" class="card-img-bottom" alt="..." />
             {{/if}}
 
-            <div class="card-footer">
-              <a href="/diary/{{id}}" type="button" class="btn btn-success">Open</a>
-              <a href="/diary/update/{{id}}" type="button" class="btn btn-primary">Update</a>
-              <a href="#" type="button" class="btn btn-danger">Delete</a>
+            <div class="card-footer d-flex gap-2">
+              <a href="/diary/{{id}}" class="btn btn-success">Open</a>
+              <a href="/diary/update/{{id}}" class="btn btn-primary">Update</a>
+
+              <form action="/diary/delete/{{id}}" method="POST" class="m-0">
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
             </div>
           </div>
         {{/each}}

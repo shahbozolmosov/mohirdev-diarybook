@@ -82,7 +82,22 @@ const updateDiary = async (req, res) => {
       { where: { id: req.params.id } }
     );
 
-    res.redirect('/diary/my')
+    res.redirect("/diary/my");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Desc     Delete diary
+// Route    POST /diary/delete/:id
+// Access   Private
+const deleteDiary = async (req, res) => {
+  try {
+    await Diary.destroy({
+      where: { id: req.params.id },
+    });
+
+    res.redirect("/diary/my");
   } catch (error) {
     console.log(error);
   }
@@ -93,5 +108,6 @@ module.exports = {
   getDiaryById,
   addNewDiary,
   updateDiaryPage,
-  updateDiary
+  updateDiary,
+  deleteDiary
 };
