@@ -12,7 +12,7 @@ const getMyDiary = async (req, res) => {
     });
     res.render("diary/my-diary", {
       title: "My Diary",
-      diaries,
+      diaries: diaries.reverse(),
     });
   } catch (error) {
     console.log(error);
@@ -40,6 +40,7 @@ const getDiaryById = async (req, res) => {
     res.render("diary/one-diary", {
       title: "Diary",
       diary: diary,
+      comments: diary.comment.reverse()
     });
   } catch (error) {
     console.log(error);
