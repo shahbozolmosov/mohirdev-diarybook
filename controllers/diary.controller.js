@@ -1,5 +1,6 @@
 const db = require("../models/index");
 const Diary = db.diary;
+const Comment = db.comment;
 
 // Desc     Get all my diaries page
 // Route    GET /diary/my
@@ -29,7 +30,10 @@ const getDiaryById = async (req, res) => {
     // });
     const diary = await Diary.findByPk(req.params.id, {
       raw: true,
+      include: ['comment'],
+      nest: true
     });
+    console.log(diary)
     res.render("diary/one-diary", {
       title: "Diary",
       diary: diary,
@@ -103,11 +107,29 @@ const deleteDiary = async (req, res) => {
   }
 };
 
+// Desc     Add comment
+// Route    POST /diary/comment/:id
+// Access   Private
+const addCommentToDiary = async (req, res) => {
+  try {
+    await Comment.create({
+      name: "Username",
+      comment: req.body.comment,
+      diaryId: req.params.id,
+    });
+
+    res.redirect(`/diary/${req.params.id}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   getMyDiary,
   getDiaryById,
   addNewDiary,
   updateDiaryPage,
   updateDiary,
-  deleteDiary
+  deleteDiary,
+  addCommentToDiary,
 };
