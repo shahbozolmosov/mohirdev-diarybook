@@ -17,6 +17,7 @@ app.engine(".hbs", exphbs.engine({ extname: ".hbs" }));
 app.set("view engine", ".hbs");
 
 // Initialize routes
+app.use("/auth", require('./routes/auth.route'))
 app.use("/diary", require("./routes/diary.route"));
 
 const PORT = process.env.PORT || 3000;
