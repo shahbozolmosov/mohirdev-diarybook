@@ -26,13 +26,33 @@ const loginUser = async (req, res) => {
   try {
     // res.setHeader('Set-Cookie', 'loggedIn=true')
     req.session.isLogged = true
-    res.redirect('/diary/my');
+    req.session.user = {
+      id: 1,
+      email: 'user@gmail.com',
+      name: 'user',
+      password: '1234567',
+    }
+    req.session.save(err => {
+      if(err) throw err;
+      res.redirect('/diary/my');
+    })
   } catch (error) {
     console.log(error);
   }
 }; 
 
+// Desc     Logout user
+// Route    POST /auth/logout
+// Access   Private
+
+const logout = (req,res) => {
+  req.session.destroy(() => {
+    res.redirect('/auth/login');
+  })
+}
+
 module.exports = {
   getLoginPage,
-  loginUser
+  loginUser,
+  logout
 };
