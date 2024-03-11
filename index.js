@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const exphbs = require("express-handlebars");
+const session = require('express-session');
 const db = require("./models/index");
 
 // Initial env variable
@@ -8,9 +9,11 @@ dotenv.config();
 
 const app = express();
 
-// Enable post form data
 app.use(express.json());
 app.use(express.urlencoded({ extends: false }));
+app.use(session({
+  secret: 'my secret value'
+}))
 
 // Initialize template engine (handlebars)
 app.engine(".hbs", exphbs.engine({ extname: ".hbs" }));

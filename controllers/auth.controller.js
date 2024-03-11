@@ -6,8 +6,10 @@ const User = db.user;
 // Access   Private
 const getLoginPage = async (req, res) => {
   try {
-    const isAuthenticated = req.get('Cookie').split('=')[1] === "true"
-    console.log(isAuthenticated)
+    // const isAuthenticated = req.get('Cookie').split('=')[1] === "true"
+
+    const isAuthenticated = req.session.isLogged
+    
     res.render("auth/login", {
       title: "Login",
       isAuthenticated
@@ -22,7 +24,8 @@ const getLoginPage = async (req, res) => {
 // Access   Public
 const loginUser = async (req, res) => {
   try {
-    res.setHeader('Set-Cookie', 'loggedIn=true')
+    // res.setHeader('Set-Cookie', 'loggedIn=true')
+    req.session.isLogged = true
     res.redirect('/diary/my');
   } catch (error) {
     console.log(error);
