@@ -2,6 +2,8 @@ const express = require("express");
 const dotenv = require("dotenv");
 const exphbs = require("express-handlebars");
 const session = require('express-session');
+const pgStore = require('connect-pg-simple')(session)
+const pool = require("./config/db");
 const db = require("./models/index");
 
 // Initial env variable
@@ -12,7 +14,13 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extends: false }));
 app.use(session({
-  secret: 'my secret value'
+  store: new pgStore({
+    pool,
+    tableName: 'user_session'
+  }),
+  secret: 'my secret value',
+  resave: false,
+  saveUninitialized: false
 }))
 
 // Initialize template engine (handlebars)
