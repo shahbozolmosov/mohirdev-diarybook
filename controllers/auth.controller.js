@@ -3,7 +3,7 @@ const User = db.user;
 
 // Desc     Get login page
 // Route    GET /auth/login
-// Access   Private
+// Access   Public
 const getLoginPage = async (req, res) => {
   try {
     // const isAuthenticated = req.get('Cookie').split('=')[1] === "true"
@@ -13,6 +13,21 @@ const getLoginPage = async (req, res) => {
     res.render("auth/login", {
       title: "Login",
       isAuthenticated
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Desc     Get registration page
+// Route    GET /auth/registration
+// Access   Public
+const getRegisterPage = async (req, res) => {
+  try {
+    const isAuthenticated = req.session.isLogged
+    
+    res.render("auth/registration", {
+      title: "Registration",
     });
   } catch (error) {
     console.log(error);
@@ -53,6 +68,7 @@ const logout = (req,res) => {
 
 module.exports = {
   getLoginPage,
+  getRegisterPage,
   loginUser,
   logout
 };
