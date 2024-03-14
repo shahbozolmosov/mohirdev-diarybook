@@ -23,12 +23,38 @@ const getLoginPage = async (req, res) => {
 // Route    GET /auth/registration
 // Access   Public
 const getRegisterPage = async (req, res) => {
-  try {
-    const isAuthenticated = req.session.isLogged
-    
+  try {  
     res.render("auth/registration", {
       title: "Registration",
     });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Desc     Register new user
+// Route    POST /auth/registration
+// Access   Public
+const registerUser = async (req, res) => {
+  try {
+    const {email, name, password, password2} = req.body
+    if(password !== password2){
+      return res.redirect('/auth/registration');
+    }
+
+    const userExist = await User.findOne({email});
+    if(userExist) {
+      return res.redirect('/auth/registration');
+    }
+
+    await User.create({
+      email,
+      name,
+      password
+    })
+
+    return res.redirect('/auth/login')
+    
   } catch (error) {
     console.log(error);
   }
@@ -68,7 +94,8 @@ const logout = (req,res) => {
 
 module.exports = {
   getLoginPage,
-  getRegisterPage,
   loginUser,
-  logout
+  logout,
+  getRegisterPage,
+  registerUser,
 };
