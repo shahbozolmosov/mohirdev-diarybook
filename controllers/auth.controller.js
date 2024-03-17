@@ -69,18 +69,7 @@ const registerUser = async (req, res) => {
 // Access   Public
 const loginUser = async (req, res) => {
   try {
-    // res.setHeader('Set-Cookie', 'loggedIn=true')
-    req.session.isLogged = true
-    req.session.user = {
-      id: 1,
-      email: 'user@gmail.com',
-      name: 'user',
-      password: '1234567',
-    }
-    req.session.save(err => {
-      if(err) throw err;
-      res.redirect('/diary/my');
-    })
+    // 
   } catch (error) {
     console.log(error);
   }
