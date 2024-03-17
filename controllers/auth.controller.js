@@ -1,4 +1,5 @@
 const db = require("../models/index");
+const bcrypt = require('bcryptjs');
 const User = db.user;
 
 // Desc     Get login page
@@ -42,15 +43,18 @@ const registerUser = async (req, res) => {
       return res.redirect('/auth/registration');
     }
 
-    const userExist = await User.findOne({email});
+    const userExist = await User.findOne({where: {email}});
     if(userExist) {
       return res.redirect('/auth/registration');
     }
 
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(password,salt)
+    
     await User.create({
       email,
       name,
-      password
+      password: hashedPassword
     })
 
     return res.redirect('/auth/login')
