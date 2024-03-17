@@ -69,7 +69,24 @@ const registerUser = async (req, res) => {
 // Access   Public
 const loginUser = async (req, res) => {
   try {
-    // 
+    const userExist = await User.findOne({where: {email: req.body.email}})
+
+    if(userExist){
+      const matchPassword = await bcrypt.compare(req.body.password, userExist.password);
+      if(matchPassword){ 
+        req.session.isLogged = true;
+        req.session.user = userExist
+        req.session.save((err) => {
+          if(err) throw err
+          return res.redirect('/diary/my')
+        })
+      }else {
+        return res.redirect('/auth/login')
+      }
+    }else {
+      return res.redirect('/auth/login')
+    }
+    
   } catch (error) {
     console.log(error);
   }
