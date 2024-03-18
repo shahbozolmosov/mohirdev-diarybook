@@ -9,13 +9,14 @@ const {
   addCommentToDiary,
 } = require("../controllers/diary.controller");
 const router = Router();
+const { protected } = require("../middlewares/auth");
 
-router.get("/my", getMyDiary);
-router.get("/:id", getDiaryById);
-router.get("/update/:id", updateDiaryPage);
-router.post("/add", addNewDiary);
-router.post("/update/:id", updateDiary);
-router.post("/delete/:id", deleteDiary);
-router.post("/comment/:id", addCommentToDiary);
+router.get("/my", protected,  getMyDiary);
+router.get("/:id", protected, getDiaryById);
+router.get("/update/:id", protected, updateDiaryPage);
+router.post("/add", protected, addNewDiary);
+router.post("/update/:id", protected, updateDiary);
+router.post("/delete/:id", protected, deleteDiary);
+router.post("/comment/:id", protected, addCommentToDiary);
 
 module.exports = router;
