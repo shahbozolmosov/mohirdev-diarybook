@@ -52,7 +52,30 @@ const getMyProfile = async (req, res) => {
   }
 };
 
+// Desc     Get update profile page
+// Route    GET /user/profile/update
+// Access   Private
+const updateProfilePage = async (req, res) => {
+  try {
+    const user = req.session.user; 
+    const diaries = await Diary.findAll({
+      where: { userId: user.id },
+      raw: true,
+    });
+
+    res.render("user/update-profile", {
+      title: user.name,
+      user,
+      diariesLength: diaries.length,
+      isAuthenticated: req.session.isLogged,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   getUserProfile,
   getMyProfile,
+  updateProfilePage
 };
