@@ -36,7 +36,7 @@ const getDiaryById = async (req, res) => {
     const data = await Diary.findByPk(req.params.id, {
       raw: false,
       plain: true,
-      include: ['comment'],
+      include: ['comment','user'],
       nest: true
     });
     
