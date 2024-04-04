@@ -45,7 +45,8 @@ const getDiaryById = async (req, res) => {
     res.render("diary/one-diary", {
       title: "Diary",
       diary: diary,
-      comments: diary.comment.reverse()
+      comments: diary.comment.reverse(),
+      isAuthenticated: req.session.isLogged
     });
   } catch (error) {
     console.log(error);

@@ -1,5 +1,5 @@
 const db = require("../models/index");
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 const User = db.user;
 
 // Desc     Get login page
@@ -9,11 +9,11 @@ const getLoginPage = async (req, res) => {
   try {
     // const isAuthenticated = req.get('Cookie').split('=')[1] === "true"
 
-    const isAuthenticated = req.session.isLogged
-    
+    const isAuthenticated = req.session.isLogged;
+
     res.render("auth/login", {
       title: "Login",
-      isAuthenticated
+      isAuthenticated,
     });
   } catch (error) {
     console.log(error);
@@ -24,7 +24,7 @@ const getLoginPage = async (req, res) => {
 // Route    GET /auth/registration
 // Access   Public
 const getRegisterPage = async (req, res) => {
-  try {  
+  try {
     res.render("auth/registration", {
       title: "Registration",
     });
@@ -38,27 +38,26 @@ const getRegisterPage = async (req, res) => {
 // Access   Public
 const registerUser = async (req, res) => {
   try {
-    const {email, name, password, password2} = req.body
-    if(password !== password2){
-      return res.redirect('/auth/registration');
+    const { email, name, password, password2 } = req.body;
+    if (password !== password2) {
+      return res.redirect("/auth/registration");
     }
 
-    const userExist = await User.findOne({where: {email}});
-    if(userExist) {
-      return res.redirect('/auth/registration');
+    const userExist = await User.findOne({ where: { email } });
+    if (userExist) {
+      return res.redirect("/auth/registration");
     }
 
-    const salt = await bcrypt.genSalt(10)
-    const hashedPassword = await bcrypt.hash(password,salt)
-    
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     await User.create({
       email,
       name,
-      password: hashedPassword
-    })
+      password: hashedPassword,
+    });
 
-    return res.redirect('/auth/login')
-    
+    return res.redirect("/auth/login");
   } catch (error) {
     console.log(error);
   }
@@ -69,38 +68,40 @@ const registerUser = async (req, res) => {
 // Access   Public
 const loginUser = async (req, res) => {
   try {
-    const userExist = await User.findOne({where: {email: req.body.email}})
+    const userExist = await User.findOne({ where: { email: req.body.email } });
 
-    if(userExist){
-      const matchPassword = await bcrypt.compare(req.body.password, userExist.password);
-      if(matchPassword){ 
+    if (userExist) {
+      const matchPassword = await bcrypt.compare(
+        req.body.password,
+        userExist.password
+      );
+      if (matchPassword) {
         req.session.isLogged = true;
-        req.session.user = userExist
+        req.session.user = userExist;
         req.session.save((err) => {
-          if(err) throw err
-          return res.redirect('/diary/my')
-        })
-      }else {
-        return res.redirect('/auth/login')
+          if (err) throw err;
+          return res.redirect("/diary/my");
+        });
+      } else {
+        return res.redirect("/auth/login");
       }
-    }else {
-      return res.redirect('/auth/login')
+    } else {
+      return res.redirect("/auth/login");
     }
-    
   } catch (error) {
     console.log(error);
   }
-}; 
+};
 
 // Desc     Logout user
 // Route    POST /auth/logout
 // Access   Private
 
-const logout = (req,res) => {
+const logout = (req, res) => {
   req.session.destroy(() => {
-    res.redirect('/auth/login');
-  })
-}
+    res.redirect("/auth/login");
+  });
+};
 
 module.exports = {
   getLoginPage,
