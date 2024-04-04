@@ -35,7 +35,7 @@ const getUserProfile = async (req, res) => {
 // Access   Private
 const getMyProfile = async (req, res) => {
   try {
-    const user = req.session.user; 
+    const user = req.session.user;
     const diaries = await Diary.findAll({
       where: { userId: user.id },
       raw: true,
@@ -57,7 +57,7 @@ const getMyProfile = async (req, res) => {
 // Access   Private
 const updateProfilePage = async (req, res) => {
   try {
-    const user = req.session.user; 
+    const user = req.session.user;
     const diaries = await Diary.findAll({
       where: { userId: user.id },
       raw: true,
@@ -74,8 +74,44 @@ const updateProfilePage = async (req, res) => {
   }
 };
 
+// Desc     Update profile
+// Route    POST /user/profile/update
+// Access   Private
+const updateProfile = async (req, res) => {
+  try {
+    const user = await User.findOne({
+      where: { id: req.session.user.id },
+      raw: true,
+    });
+
+    if (req.body.email === User.email) {
+      return res.redirect("/user/profile/update");
+    }
+
+    const newDetails = await User.update(
+      { name: req.body.name, email: req.body.email },
+      {
+        where: { id: req.session.user.id },
+        returning: true,
+        raw: true,
+        plain: true,
+      }
+    );
+
+    req.session.user = newDetails[1];
+    req.session.save((err) => {
+      if (err) throw err;
+
+      res.redirect("/user/profile/my");
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   getUserProfile,
   getMyProfile,
-  updateProfilePage
+  updateProfilePage,
+  updateProfile,
 };
