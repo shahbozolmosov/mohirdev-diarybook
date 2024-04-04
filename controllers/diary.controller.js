@@ -9,7 +9,11 @@ const getMyDiary = async (req, res) => {
   try {
     const diaries = await Diary.findAll({
       raw: true,
+      plain: false,
+      include: ['user'],
+      nest: true
     });
+    
     res.render("diary/my-diary", {
       title: "My Diary",
       diaries: diaries.reverse(),
