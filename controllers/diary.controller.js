@@ -1,6 +1,7 @@
 const { Op, where } = require("sequelize");
 const db = require("../models/index");
 const Diary = db.diary;
+const User = db.user;
 const Comment = db.comment;
 
 // Desc     Get all my diaries page
@@ -148,10 +149,13 @@ const deleteDiary = async (req, res) => {
 // Access   Private
 const addCommentToDiary = async (req, res) => {
   try {
+    const user = await User.findByPk(req.session.user.id);
+    console.log('user------------------',user)
     await Comment.create({
-      name: "Username",
+      name: user.name,
       comment: req.body.comment,
       diaryId: req.params.id,
+      userId: user.id
     });
 
     res.redirect(`/diary/${req.params.id}`);
