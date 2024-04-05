@@ -1,3 +1,4 @@
+const { Op, where } = require("sequelize");
 const db = require("../models/index");
 const Diary = db.diary;
 const Comment = db.comment;
@@ -8,6 +9,7 @@ const Comment = db.comment;
 const getMyDiary = async (req, res) => {
   try {
     const diaries = await Diary.findAll({
+      where: { userId: req.session.user.id },
       raw: true,
       plain: false,
       include: ["user"],
@@ -59,6 +61,7 @@ const getDiaryById = async (req, res) => {
 const getAllDiary = async (req, res) => {
   try {
     const diaries = await Diary.findAll({
+      where: { userId: { [Op.ne]: req.session.user.id } },
       raw: true,
       plain: false,
       include: ["user"],
@@ -165,5 +168,5 @@ module.exports = {
   updateDiary,
   deleteDiary,
   addCommentToDiary,
-  getAllDiary
+  getAllDiary,
 };
