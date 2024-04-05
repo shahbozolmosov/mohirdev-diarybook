@@ -7,11 +7,13 @@ const {
   updateDiary,
   deleteDiary,
   addCommentToDiary,
+  getAllDiary
 } = require("../controllers/diary.controller");
 const router = Router();
 const { protected } = require("../middlewares/auth");
 
 router.get("/my", protected,  getMyDiary);
+router.get("/all", protected,  getAllDiary);
 router.get("/:id", protected, getDiaryById);
 router.get("/update/:id", protected, updateDiaryPage);
 router.post("/add", protected, addNewDiary);

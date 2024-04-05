@@ -10,14 +10,14 @@ const getMyDiary = async (req, res) => {
     const diaries = await Diary.findAll({
       raw: true,
       plain: false,
-      include: ['user'],
-      nest: true
+      include: ["user"],
+      nest: true,
     });
-    
+
     res.render("diary/my-diary", {
       title: "My Diary",
       diaries: diaries.reverse(),
-      isAuthenticated: req.session.isLogged
+      isAuthenticated: req.session.isLogged,
     });
   } catch (error) {
     console.log(error);
@@ -36,17 +36,39 @@ const getDiaryById = async (req, res) => {
     const data = await Diary.findByPk(req.params.id, {
       raw: false,
       plain: true,
-      include: ['comment','user'],
-      nest: true
+      include: ["comment", "user"],
+      nest: true,
     });
-    
+
     const diary = await data.toJSON();
-    
+
     res.render("diary/one-diary", {
       title: "Diary",
       diary: diary,
       comments: diary.comment.reverse(),
-      isAuthenticated: req.session.isLogged
+      isAuthenticated: req.session.isLogged,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Desc     Get all diaries
+// Route    GET /diary/all
+// Access   Private
+const getAllDiary = async (req, res) => {
+  try {
+    const diaries = await Diary.findAll({
+      raw: true,
+      plain: false,
+      include: ["user"],
+      nest: true,
+    });
+
+    res.render("diary/all-diary", {
+      title: "All Diary",
+      diaries: diaries.reverse(),
+      isAuthenticated: req.session.isLogged,
     });
   } catch (error) {
     console.log(error);
@@ -62,7 +84,7 @@ const addNewDiary = async (req, res) => {
     await Diary.create({
       imageUrl,
       text,
-      userId: req.session.user.id
+      userId: req.session.user.id,
     });
     res.redirect("/diary/my");
   } catch (err) {
@@ -143,4 +165,5 @@ module.exports = {
   updateDiary,
   deleteDiary,
   addCommentToDiary,
+  getAllDiary
 };
