@@ -25,21 +25,20 @@ app.use(
     saveUninitialized: false,
   })
 );
-app.use(csrf())
 
 
 // Initialize template engine (handlebars)
 app.engine(".hbs", exphbs.engine({ extname: ".hbs" }));
 app.set("view engine", ".hbs");
 
+// Initialize routes
+app.use("/diary", require("./routes/diary.route"));
 app.use((req, res, next ) => {
   res.locals.csrfToken = req.csrfToken()
   next()
 })
-
-// Initialize routes
+app.use(csrf())
 app.use("/auth", require("./routes/auth.route"));
-app.use("/diary", require("./routes/diary.route"));
 app.use("/user", require("./routes/user.route"));
 app.use("/", async (req, res) => {
   try {
