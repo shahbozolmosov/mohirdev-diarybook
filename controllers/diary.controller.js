@@ -51,6 +51,7 @@ const getDiaryById = async (req, res) => {
       diary: diary,
       comments: diary.comment.reverse(),
       isAuthenticated: req.session.isLogged,
+      errorMessage: req.flash("error"),
     });
   } catch (error) {
     console.log(error);
@@ -157,7 +158,12 @@ const deleteDiary = async (req, res) => {
 const addCommentToDiary = async (req, res) => {
   try {
     const user = await User.findByPk(req.session.user.id);
-    console.log("user------------------", user);
+
+    if (req.body.comment === "") {
+      req.flash("error", "Please add your comment");
+      return res.redirect(`/diary/${req.params.id}`);
+    }
+
     await Comment.create({
       name: user.name,
       comment: req.body.comment,
