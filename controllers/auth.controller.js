@@ -14,6 +14,7 @@ const getLoginPage = async (req, res) => {
     res.render("auth/login", {
       title: "Login",
       isAuthenticated,
+      errorMessage: req.flash('error'),
     });
   } catch (error) {
     console.log(error);
@@ -86,6 +87,7 @@ const loginUser = async (req, res) => {
         return res.redirect("/auth/login");
       }
     } else {
+      req.flash('error','You entered wrong email or password')
       return res.redirect("/auth/login");
     }
   } catch (error) {
