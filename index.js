@@ -3,7 +3,8 @@ const dotenv = require("dotenv");
 const exphbs = require("express-handlebars");
 const session = require("express-session");
 const pgStore = require("connect-pg-simple")(session);
-const csrf = require('csurf')
+const csrf = require("csurf");
+const flash = require("connect-flash");
 const pool = require("./config/db");
 const db = require("./models/index");
 
@@ -25,19 +26,20 @@ app.use(
     saveUninitialized: false,
   })
 );
-
+app.use(flash());
 
 // Initialize template engine (handlebars)
 app.engine(".hbs", exphbs.engine({ extname: ".hbs" }));
 app.set("view engine", ".hbs");
 
+
 // Initialize routes
 app.use("/diary", require("./routes/diary.route"));
-app.use((req, res, next ) => {
-  res.locals.csrfToken = req.csrfToken()
-  next()
-})
-app.use(csrf())
+app.use(csrf());
+app.use((req, res, next) => {
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
 app.use("/auth", require("./routes/auth.route"));
 app.use("/user", require("./routes/user.route"));
 app.use("/", async (req, res) => {
