@@ -48,6 +48,9 @@ const loginUser = async (req, res) => {
         title: "Login",
         isAuthenticated,
         errorMessage: errors.array()[0].msg,
+        oldInput: {
+          email: req.body.email,
+        },
       });
     }
 
@@ -66,8 +69,15 @@ const loginUser = async (req, res) => {
           return res.redirect("/diary/my");
         });
       } else {
-        req.flash("error", "You entered wrong email or password");
-        return res.redirect("/auth/login");
+        req.flash("error", "You entered wrong email or password")
+        return res.status(400).render("auth/login", {
+          title: "Login",
+          isAuthenticated,
+          errorMessage: req.flash('error'),
+          oldInput: {
+            email: req.body.email,
+          },
+        });
       }
     } else {
       req.flash("error", "You entered wrong email or password");
@@ -91,6 +101,12 @@ const registerUser = async (req, res) => {
         title: "Login",
         isAuthenticated,
         errorMessage: errors.array()[0].msg,
+        oldInput: {
+          email,
+          name,
+          password,
+          password2,
+        },
       });
     }
     if (password !== password2) {
