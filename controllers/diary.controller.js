@@ -3,6 +3,7 @@ const db = require("../models/index");
 const Diary = db.diary;
 const User = db.user;
 const Comment = db.comment;
+const { validationResult } = require("express-validator");
 
 // Desc     Get all my diaries page
 // Route    GET /diary/my
@@ -87,10 +88,14 @@ const getAllDiary = async (req, res) => {
 const addNewDiary = async (req, res) => {
   try {
     const { imageUrl, text } = req.body;
+    const errors = validationResult(req);
 
-    if (text === "") {
-      req.flash("error", "Please add your diary");
-      return res.redirect("/diary/my");
+    if (!errors.isEmpty()) {
+      return res.status(400).render("diary/my-diary", {
+        title: "My Diary",
+        isAuthenticated: req.session.isLogged,
+        errorMessage: errors.array()[0].msg,
+      });
     }
 
     await Diary.create({

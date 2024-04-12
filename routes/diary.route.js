@@ -7,16 +7,22 @@ const {
   updateDiary,
   deleteDiary,
   addCommentToDiary,
-  getAllDiary
+  getAllDiary,
 } = require("../controllers/diary.controller");
 const router = Router();
 const { protected } = require("../middlewares/auth");
+const { body, check } = require("express-validator");
 
-router.get("/my", protected,  getMyDiary);
-router.get("/all", protected,  getAllDiary);
+router.get("/my", protected, getMyDiary);
+router.get("/all", protected, getAllDiary);
 router.get("/:id", protected, getDiaryById);
 router.get("/update/:id", protected, updateDiaryPage);
-router.post("/add", protected, addNewDiary);
+router.post(
+  "/add",
+  body("text", "Please add at least 3 characters to your diary").isLength({ min: 3 }),
+  protected,
+  addNewDiary
+);
 router.post("/update/:id", protected, updateDiary);
 router.post("/delete/:id", protected, deleteDiary);
 router.post("/comment/:id", protected, addCommentToDiary);
