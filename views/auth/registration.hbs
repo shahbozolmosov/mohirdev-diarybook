@@ -4,7 +4,7 @@
       {{#if errorMessage}}
         <div class="alert alert-danger" role="alert">{{errorMessage}}</div>
       {{/if}}
-      <form accept="/auth/registration" method="post">
+      <form accept="/auth/registration" method="post" novalidate>
         <div class="mb-3">
           <label for="email" class="form-label">Email address</label>
           <input type="email" class="form-control" name="email" id="email" />
