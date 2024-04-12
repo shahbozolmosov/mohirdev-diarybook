@@ -7,6 +7,7 @@ const csrf = require("csurf");
 const flash = require("connect-flash");
 const pool = require("./config/db");
 const db = require("./models/index");
+const path = require("path");
 
 // Initial env variable
 dotenv.config();
@@ -32,6 +33,7 @@ app.use(flash());
 app.engine(".hbs", exphbs.engine({ extname: ".hbs" }));
 app.set("view engine", ".hbs");
 
+app.use(express.static(path.join(__dirname, "public")));
 
 // Initialize routes
 app.use("/diary", require("./routes/diary.route"));
