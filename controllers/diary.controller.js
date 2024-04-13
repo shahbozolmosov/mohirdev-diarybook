@@ -64,18 +64,28 @@ const getDiaryById = async (req, res) => {
 // Access   Private
 const getAllDiary = async (req, res) => {
   try {
+    const page = +req.query.page;
+    const itemsLimit = 2;
     const diaries = await Diary.findAll({
       where: { userId: { [Op.ne]: req.session.user.id } },
       raw: true,
       plain: false,
       include: ["user"],
       nest: true,
+      limit: itemsLimit,
+      offset: (page - 1) * itemsLimit,
     });
-
+    const totalData = await Diary.count();
     res.render("diary/all-diary", {
       title: "All Diary",
       diaries: diaries.reverse(),
       isAuthenticated: req.session.isLogged,
+      totalData,
+      nextPage: page + 1,
+      previousPage: page - 1,
+      hasNextPage: page * itemsLimit < totalData,
+      hasPrevPage: page - 1,
+      lastPage: Math.ceil(totalData / itemsLimit),
     });
   } catch (error) {
     console.log(error);
