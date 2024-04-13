@@ -35,3 +35,5 @@ function checkFileType(file, cb) {
 
   return cb("Error: You can only upload image files");
 }
+
+module.exports = upload;

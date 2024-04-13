@@ -12,6 +12,7 @@ const {
 const router = Router();
 const { protected } = require("../middlewares/auth");
 const { body, check } = require("express-validator");
+const upload = require("../utils/fileUpload");
 
 router.get("/my", protected, getMyDiary);
 router.get("/all", protected, getAllDiary);
@@ -19,7 +20,10 @@ router.get("/:id", protected, getDiaryById);
 router.get("/update/:id", protected, updateDiaryPage);
 router.post(
   "/add",
-  body("text", "Please add at least 3 characters to your diary").isLength({ min: 3 }),
+  body("text", "Please add at least 3 characters to your diary").isLength({
+    min: 3,
+  }),
+  upload.single("imageUrl"),
   protected,
   addNewDiary
 );
