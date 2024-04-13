@@ -64,10 +64,10 @@ const getDiaryById = async (req, res) => {
 // Access   Private
 const getAllDiary = async (req, res) => {
   try {
-    const page = +req.query.page;
+    const page = +req.query.page || 1;
     const itemsLimit = 2;
     const diaries = await Diary.findAll({
-      where: { userId: { [Op.ne]: req.session.user.id } },
+      // where: { userId: { [Op.ne]: req.session.user.id } },
       raw: true,
       plain: false,
       include: ["user"],
@@ -76,16 +76,20 @@ const getAllDiary = async (req, res) => {
       offset: (page - 1) * itemsLimit,
     });
     const totalData = await Diary.count();
+    const lastPage = Math.ceil(totalData / itemsLimit);
     res.render("diary/all-diary", {
       title: "All Diary",
       diaries: diaries.reverse(),
       isAuthenticated: req.session.isLogged,
       totalData,
+      currentPage: page,
       nextPage: page + 1,
       previousPage: page - 1,
       hasNextPage: page * itemsLimit < totalData,
       hasPrevPage: page - 1,
-      lastPage: Math.ceil(totalData / itemsLimit),
+      lastPage,
+      currentPageAndPrevPageNotEqualOne: page !== 1 && page - 1 !== 1,
+      lastPageChecking: lastPage !== page && lastPage !== page + 1,
     });
   } catch (error) {
     console.log(error);
