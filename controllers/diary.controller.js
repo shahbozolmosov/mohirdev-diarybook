@@ -89,7 +89,7 @@ const addNewDiary = async (req, res) => {
   try {
     const { text } = req.body;
     const errors = validationResult(req);
-    console.log('body', req.file);
+
     if (!errors.isEmpty()) {
       return res.status(400).render("diary/my-diary", {
         title: "My Diary",
@@ -97,9 +97,9 @@ const addNewDiary = async (req, res) => {
         errorMessage: errors.array()[0].msg,
       });
     }
-
+    const fileUrl = req.file ? "/uploads/" + req.file.filename : "";
     await Diary.create({
-      imageUrl:'',
+      imageUrl: fileUrl,
       text,
       userId: req.session.user.id,
     });

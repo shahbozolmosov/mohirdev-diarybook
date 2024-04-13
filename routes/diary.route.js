@@ -20,10 +20,10 @@ router.get("/:id", protected, getDiaryById);
 router.get("/update/:id", protected, updateDiaryPage);
 router.post(
   "/add",
+  upload.single("imageUrl"),
   body("text", "Please add at least 3 characters to your diary").isLength({
     min: 3,
   }),
-  upload.single("imageUrl"),
   protected,
   addNewDiary
 );
