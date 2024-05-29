@@ -27,6 +27,7 @@ app.use(
     saveUninitialized: false,
   })
 );
+// messsage
 app.use(flash());
 
 // Initialize template engine (handlebars)
